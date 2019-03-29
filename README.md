@@ -11,7 +11,7 @@ PHP 7+
 
 This project was built from laravel framework.
 
-Run composer install
+Run composer install `` composer install `` (make sure you are in the root of your application.)
 
 Run the migration: `` php artisan migrate ``
 
