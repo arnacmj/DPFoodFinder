@@ -89,7 +89,7 @@
             $.post(`/api/search-restaurant`, {search: keyword}, function(response) {
                 const res = response.data;
                 const status = response.status;
-
+                console.log(res);
                 if (status === 'success') {
                     let card_result = $('#card_result'), result = '';
 
@@ -103,10 +103,10 @@
                                                 <address>${item.address}</address>
                                                 <hr>
                                                 <p><small>Location: </small><strong>Lat: ${item.latitude} , Lng: ${item.longitude}</strong></p>
-                                                <p><small>Category: </small> <strong>${item.category.category}</strong></p>
-                                                <p><small>Speciality: </small> <strong>${item.speciality.speciality}</strong></p>
-                                                <p><small>Daily: </small> <strong>${item.sale.total_daily_sales.toFixed(2)}</strong></p>
-                                                <p><small>Monthly: </small> <strong>${item.sale.total_monthly_sales.toFixed(2)}</strong></p>
+                                                <p><small>Category: </small> <strong>${item.category ? item.category.category : 'N/A'}</strong></p>
+                                                <p><small>Speciality: </small> <strong>${item.speciality ? item.speciality.speciality : 'N/A'}</strong></p>
+                                                <p><small>Daily: </small> <strong>${item.sale ? item.sale.total_daily_sales.toFixed(2) : 'N/A'}</strong></p>
+                                                <p><small>Monthly: </small> <strong>${item.sale ? item.sale.total_monthly_sales.toFixed(2) : 'N/A'}</strong></p>
                                             </div>
                                         </div>
                                     </div>`
@@ -151,8 +151,8 @@
 
             let infoMarkerWindow = new google.maps.InfoWindow({
                 content: `<div>
-                            <p>${name}</p>
-                            <p>Latitude: ${latitude} Longitude: ${longitude}</p>
+                            <p><strong>${name}</strong></p>
+                            <p><small>Latitude:</small> <strong>${latitude}</strong> <small>Longitude:</small> <strong>${longitude}</strong></p>
                         </div>`
             });
 
