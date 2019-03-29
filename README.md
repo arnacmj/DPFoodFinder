@@ -30,5 +30,5 @@ Boot up laravel built in server.
 `` php artisan serve ``
 
 
-## Disclimers
+## Disclimer
 Internal Projects.
