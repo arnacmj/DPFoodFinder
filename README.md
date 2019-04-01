@@ -11,11 +11,11 @@ PHP 7+
 
 This project was built from laravel framework.
 
-Run composer install
+Run composer install ``$ composer install ``  _(make sure you are in the root of your application.)_
 
-Run the migration: `` php artisan migrate ``
+Run the migration: ``$ php artisan migrate `` _(make sure you have database and edited your .env file specifically the database section.)_
 
-Run the seeder: `` php artisan db:seed ``
+Run the seeder: ``$ php artisan db:seed ``
 
 ## Frontend/Client Side
 
@@ -27,8 +27,8 @@ Boot up laravel built in server.
 
 ## Run
 
-`` php artisan serve ``
+``$ php artisan serve ``
 
 
-## Disclimers
+## Disclimer
 Internal Projects.
