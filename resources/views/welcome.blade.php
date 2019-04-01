@@ -65,7 +65,7 @@
         function initMap() {
             let options = {
                 zoom: 14,
-                center: {lat: 7.0806522, lng: 125.6136265}
+                center: {lat: 7.0826, lng: 125.6136}
             };
 
             map = new google.maps.Map(document.getElementById('map'), options);
@@ -89,20 +89,26 @@
             $.post(`/api/search-restaurant`, {search: keyword}, function(response) {
                 const res = response.data;
                 const status = response.status;
-                console.log(res);
+
                 if (status === 'success') {
                     let card_result = $('#card_result'), result = '';
 
                     res.map(item => {
-                        addMarker(Number(item.latitude), Number(item.longitude), item.name);
-                        result += `<div onclick="restoInfo(${item.id}, ${item.latitude}, ${item.longitude}, '${item.name}')" class="card" style="border: 1px solid #ffffff; cursor: pointer;">
+                        let info = {
+                            'speciality': item.speciality ? item.speciality.speciality : 'N/A',
+                            'daily_sale': item.sale ? item.sale.total_daily_sales.toFixed(2) : 'N/A',
+                            'monthly_sale': item.sale ? item.sale.total_monthly_sales.toFixed(2) : 'N/A'
+                        };
+                        addMarker(Number(item.latitude), Number(item.longitude), item.name, item.address, item.speciality.speciality,  item.sale.total_daily_sales.toFixed(2), item.sale.total_monthly_sales.toFixed(2));
+                        result += `<div onclick="restoInfo(${item.id}, ${item.latitude}, ${item.longitude}, '${item.name}', '${item.address}', '${item.speciality.speciality}', '${item.sale.total_daily_sales.toFixed(2)}', '${item.sale.total_monthly_sales.toFixed(2)}')" class="card" style="border: 1px solid #ffffff; cursor: pointer;">
                                         <div class="card-body" style="width: 100%">
                                             <h5 id="restoName_${item.id}" class="card-title" style="color: blue;">${item.name}</h5>
                                             <hr>
                                             <div id="resto_info_${item.id}" style="display: none;">
                                                 <address>${item.address}</address>
                                                 <hr>
-                                                <p><small>Location: </small><strong>Lat: ${item.latitude} , Lng: ${item.longitude}</strong></p>
+                                                <p><small>Location: </small></p>
+                                                <p><strong>Lat: ${item.latitude} , Lng: ${item.longitude}</strong></p>
                                                 <p><small>Category: </small> <strong>${item.category ? item.category.category : 'N/A'}</strong></p>
                                                 <p><small>Speciality: </small> <strong>${item.speciality ? item.speciality.speciality : 'N/A'}</strong></p>
                                                 <p><small>Daily: </small> <strong>${item.sale ? item.sale.total_daily_sales.toFixed(2) : 'N/A'}</strong></p>
@@ -119,7 +125,7 @@
         }
 
 
-        function restoInfo(id, latitude, longitude, name) {
+        function restoInfo(id, latitude, longitude, name, address, speciality, total_daily_sales, total_monthly_sales) {
 
             let info_dev = $('#resto_info_' + id);
             let info_id = localStorage.getItem('info_id');
@@ -131,7 +137,7 @@
                 setMapOnAll(null);
             }
 
-            addMarker(latitude, longitude, name);
+            addMarker(latitude, longitude, name, address, speciality, total_daily_sales, total_monthly_sales);
 
             $('#restoName_' + id).css('color', '#000000');
             info_dev.css('display', 'block');
@@ -144,7 +150,7 @@
             }, 5000);
         }
 
-        function addMarker(latitude, longitude, name) {
+        function addMarker(latitude, longitude, name, address, speciality, total_daily_sales, total_monthly_sales) {
 
             let marker = new google.maps.Marker({position: {lat: latitude, lng: longitude},map: map});
             markers.push(marker);
@@ -152,12 +158,19 @@
             let infoMarkerWindow = new google.maps.InfoWindow({
                 content: `<div>
                             <p><strong>${name}</strong></p>
+                            <p><small><address>${address}</address></small></p>
                             <p><small>Latitude:</small> <strong>${latitude}</strong> <small>Longitude:</small> <strong>${longitude}</strong></p>
+                            <p><small>Speciality: </small><strong>${speciality}</strong></p>
+                            <p><small>Daily Sale: </small><strong>${total_daily_sales}</strong></p>
+                            <p><small>Monthly Sale: </small><strong>${total_monthly_sales}</strong></p>
                         </div>`
             });
 
-            marker.addListener('click', function() {
+            marker.addListener('mouseover', function() {
                 infoMarkerWindow.open(map, marker);
+            });
+            marker.addListener('mouseout', function() {
+                infoMarkerWindow.close();
             });
         }
 
