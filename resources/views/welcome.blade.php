@@ -94,11 +94,6 @@
                     let card_result = $('#card_result'), result = '';
 
                     res.map(item => {
-                        let info = {
-                            'speciality': item.speciality ? item.speciality.speciality : 'N/A',
-                            'daily_sale': item.sale ? item.sale.total_daily_sales.toFixed(2) : 'N/A',
-                            'monthly_sale': item.sale ? item.sale.total_monthly_sales.toFixed(2) : 'N/A'
-                        };
                         addMarker(Number(item.latitude), Number(item.longitude), item.name, item.address, item.speciality.speciality,  item.sale.total_daily_sales.toFixed(2), item.sale.total_monthly_sales.toFixed(2));
                         result += `<div onclick="restoInfo(${item.id}, ${item.latitude}, ${item.longitude}, '${item.name}', '${item.address}', '${item.speciality.speciality}', '${item.sale.total_daily_sales.toFixed(2)}', '${item.sale.total_monthly_sales.toFixed(2)}')" class="card" style="border: 1px solid #ffffff; cursor: pointer;">
                                         <div class="card-body" style="width: 100%">
